@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert, Image } from 'react-native';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -7,6 +7,10 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+    <Image
+    source={require('../assets/cantinaLogo.png')}
+    />
+
       <Text style={{color: '#fff'}}>Usuário</Text>
       <TextInput
         placeholder="Digite seu email"
