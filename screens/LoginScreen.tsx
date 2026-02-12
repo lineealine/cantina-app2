@@ -7,21 +7,21 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>Usuário</Text>
+      <Text style={{color: '#fff'}}>Usuário</Text>
       <TextInput
         placeholder="Digite seu email"
         value={email}
         onChangeText={(e) => setEmail(e)}
-        style={{ borderWidth: 1, width: 250, padding: 8, marginBottom: 10 }}
+        style={{ borderWidth: 1, width: 250, padding: 8, marginBottom: 10, borderRadius: 10, backgroundColor: '#fff'}}
       />
 
-      <Text>Senha</Text>
+      <Text style={{color: '#fff'}}>Senha</Text>
       <TextInput
         placeholder="Informe sua senha"
         secureTextEntry
         value={senha}
         onChangeText={(e) => setSenha(e)}
-        style={{ borderWidth: 1, width: 250, padding: 8, marginBottom: 20 }}
+        style={{ borderWidth: 1, width: 250, padding: 8, marginBottom: 20, borderRadius: 10, backgroundColor: '#fff'}}
       />
 
       <Button
@@ -35,7 +35,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#981f24',
     alignItems: 'center',
     justifyContent: 'center',
   },
