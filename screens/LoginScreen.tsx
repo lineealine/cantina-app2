@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { 
   StyleSheet, 
   Text, 
@@ -14,11 +15,16 @@ import {
   ScrollView
 } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
-  const [campoFocado, setCampoFocado] = useState(null); // Para o efeito de borda
+  const [campoFocado, setCampoFocado] = useState(null); 
+
+ 
+  const navigation = useNavigation();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
@@ -36,15 +42,18 @@ export default function LoginScreen() {
       return;
     }
     setLoading(true);
-    // Simula uma requisição ao servidor
+    
     setTimeout(() => {
       setLoading(false);
-      Alert.alert('Sucesso', `Bem-vindo, ${email}!`);
+      
+     
+      navigation.navigate('Pgna1');
+      
     }, 2000);
   };
 
   return (
-    // MELHORIA 3: Evita que o teclado cubra os campos
+    
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
@@ -68,7 +77,6 @@ export default function LoginScreen() {
 
             <View style={styles.form}>
                 <Text style={styles.label}>Usuário</Text>
-                {/* MELHORIA 1: Borda muda de cor no Focus */}
                 <TextInput
                   placeholder="Digite seu email"
                   placeholderTextColor="#ccc"
@@ -92,8 +100,6 @@ export default function LoginScreen() {
                   onBlur={() => setCampoFocado(null)}
                   style={[styles.input, campoFocado === 'senha' && styles.inputFocado]}
                 />
-
-                {/* MELHORIA 2: Botão com Loading */}
                 <TouchableOpacity 
                   style={styles.botao} 
                   onPress={handleLogin}
@@ -121,7 +127,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
-    minHeight: 600, // Garante que o conteúdo não esmague
+    minHeight: 600, 
   },
   logo: {
     width: 180,
@@ -148,7 +154,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1.5, 
-    borderColor: 'transparent', // Borda invisível por padrão
+    borderColor: 'transparent', 
     width: '70%', 
     padding: 12, 
     marginBottom: 15, 
@@ -158,7 +164,7 @@ const styles = StyleSheet.create({
     color: '#333'
   },
   inputFocado: {
-    borderColor: '#ffd700', // Destaque em dourado/amarelo quando clica
+    borderColor: '#ffd700', 
   },
   botao: {
     backgroundColor: '#fff',
@@ -169,7 +175,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 50, // Altura fixa para o loader não mexer no botão
+    height: 50, 
   },
   textoBotao: {
     color: '#981f24',
