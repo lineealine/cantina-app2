@@ -5,15 +5,108 @@ import {
   ScrollView,
   SafeAreaView,
   StyleSheet,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 
 export default function Pgna1() {
+  const salgados = [
+    {
+      nome: "Coxinha Vegana",
+      img: require('../assets/coxinha-vegana.jpg'),
+      desc: "Massa crocante com recheio de palmito",
+      preco: "R$ 5,00"
+    },
+    {
+      nome: "Enroladinho de Salsicha",
+      img: require('../assets/9ae5e0c4c6cc31faac49283836601c0e.jpg'),
+      desc: "Massa leve e salsicha",
+      preco: "R$ 5,00"
+    },
+    {
+      nome: "Assado de Frango",
+      img: require('../assets/calzone-de-frango.jpg'),
+      desc: "Frango desfiado caseiro",
+      preco: "R$ 8,00"
+    },
+    {
+      nome: "Assado de Carne",
+      img: require('../assets/images.jpg'),
+      desc: "Carne moída com palmito",
+      preco: "R$ 8,00"
+    },
+    {
+      nome: "Pastel de Queijo",
+      img: require('../assets/images1.jpg'),
+      desc: "Fritura crocante",
+      preco: "R$ 8,00"
+    },
+    {
+      nome: "Pão de Queijo",
+      img: require('../assets/622052-pao-de-queijo-assado-forno_1.webp'),
+      desc: "Tradicional mineiro",
+      preco: "R$ 4,00"
+    }
+  ];
+
+  const bebidas = [
+    {
+      nome: "Refrigerante Lata",
+      img: require('../assets/refrigerante-lata.jpg'),
+      desc: "Coca, Guaraná, Fanta",
+      preco: "R$ 7,50"
+    },
+    {
+      nome: "Suco Natural",
+      img: require('../assets/suco.jpg'),
+      desc: "Laranja, Uva, Limão",
+      preco: "R$ 7,00"
+    },
+    {
+      nome: "Água Mineral",
+      img: require('../assets/agua-mineral.webp'),
+      desc: "Com ou sem gás",
+      preco: "R$ 3,50"
+    },
+    {
+      nome: "Café",
+      img: require('../assets/cafe.jpg'),
+      desc: "Expresso ou Pingado",
+      preco: "R$ 4,00"
+    }
+  ];
+
+  const renderItem = (item: any, index: number) => (
+    <View key={index} style={styles.item}>
+      <View style={styles.itemLeft}>
+        <Text style={styles.itemName}>{item.nome}</Text>
+
+        <Image
+          source={item.img}
+          style={styles.image}
+        />
+
+        <Text style={styles.itemDesc}>{item.desc}</Text>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.cartButton}>
+            <Text style={styles.buttonText}>🛒 Carrinho</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.buyButton}>
+            <Text style={styles.buttonText}>💳 Comprar</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <Text style={styles.price}>{item.preco}</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.scrollView}>
 
-        {/* HEADER */}
         <View style={styles.header}>
           <Text style={styles.title}>Cantina App</Text>
           <Text style={styles.subtitle}>
@@ -21,183 +114,16 @@ export default function Pgna1() {
           </Text>
         </View>
 
-        {/* SALGADOS */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Salgados e Assados
-          </Text>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-            
-              <Text style={styles.itemName}>
-                Coxinha Vegana
-                <Text style={styles.badge}> VEGANO</Text>
-              </Text>
-              <Image 
-              source={require('../assets/coxinha-vegana.jpg')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Massa crocante com recheio de palmito
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 5,00</Text>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-              <Text style={styles.itemName}>
-                Enroladinho de Salsicha
-              </Text>
-              <Image 
-              source={require('../assets/9ae5e0c4c6cc31faac49283836601c0e.jpg')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Massa leve e salsicha
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 5,00</Text>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-              <Text style={styles.itemName}>
-                Assado de Frango
-              </Text>
-              <Image 
-              source={require('../assets/calzone-de-frango.jpg')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Frango desfiado caseiro
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 8,00</Text>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-              <Text style={styles.itemName}>
-                Assado de Carne
-              </Text>
-              <Image 
-              source={require('../assets/images.jpg')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Carne moída com palmito
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 8,00</Text>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-              <Text style={styles.itemName}>
-                Pastel de Queijo
-              </Text>
-              <Image 
-              source={require('../assets/images1.jpg')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Fritura crocante
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 8,00</Text>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-              <Text style={styles.itemName}>
-                Pão de Queijo
-              </Text>
-              <Image 
-              source={require('../assets/622052-pao-de-queijo-assado-forno_1.webp')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Tradicional mineiro
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 4,00</Text>
-          </View>
+          <Text style={styles.sectionTitle}>Salgados e Assados</Text>
+          {salgados.map(renderItem)}
         </View>
 
-        {/* BEBIDAS */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Bebidas
-          </Text>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-              <Text style={styles.itemName}>
-                Refrigerante Lata
-              </Text>
-              <Image 
-              source={require('../assets/refrigerante-lata.jpg')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Coca, Guaraná, Fanta
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 7,50</Text>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-              <Text style={styles.itemName}>
-                Suco Natural
-              </Text>
-              <Image 
-              source={require('../assets/suco.jpg')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Laranja, Uva, Limão
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 7,00</Text>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-              <Text style={styles.itemName}>
-                Água Mineral
-              </Text>
-              <Image 
-              source={require('../assets/agua-mineral.webp')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Com ou sem gás
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 3,50</Text>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.itemLeft}>
-              <Text style={styles.itemName}>
-                Café
-              </Text>
-              <Image 
-              source={require('../assets/cafe.jpg')}
-              style={{ height: 250, width: 250}}
-              />>
-              <Text style={styles.itemDesc}>
-                Expresso ou Pingado
-              </Text>
-            </View>
-            <Text style={styles.price}>R$ 4,00</Text>
-          </View>
+          <Text style={styles.sectionTitle}>Bebidas</Text>
+          {bebidas.map(renderItem)}
         </View>
 
-        {/* FOOTER */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
             Aceitamos cartões de crédito e débito
@@ -208,6 +134,11 @@ export default function Pgna1() {
         </View>
 
       </ScrollView>
+
+      <TouchableOpacity style={styles.floatingButton}>
+        <Text style={styles.floatingButtonText}>🛒</Text>
+      </TouchableOpacity>
+
     </SafeAreaView>
   );
 }
@@ -241,7 +172,7 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 20,
   },
   itemLeft: {
     flex: 1,
@@ -252,13 +183,37 @@ const styles = StyleSheet.create({
   itemDesc: {
     color: '#666',
     fontSize: 12,
+    marginTop: 5,
   },
   price: {
     fontWeight: 'bold',
+    marginLeft: 10,
   },
-  badge: {
-    color: 'green',
+  image: {
+    width: 120,
+    height: 120,
+    marginTop: 8,
+    borderRadius: 8,
+  },
+  buttonContainer: {
+    marginTop: 8,
+    flexDirection: 'row',
+    gap: 8,
+  },
+  cartButton: {
+    backgroundColor: '#FFA500',
+    padding: 6,
+    borderRadius: 5,
+  },
+  buyButton: {
+    backgroundColor: '#008000',
+    padding: 6,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
     fontSize: 12,
+    fontWeight: 'bold',
   },
   footer: {
     padding: 20,
@@ -267,5 +222,21 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: 12,
     color: '#666',
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#8B0000',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+  },
+  floatingButtonText: {
+    color: '#fff',
+    fontSize: 24,
   },
 });
