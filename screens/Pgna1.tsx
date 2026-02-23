@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,137 +6,107 @@ import {
   SafeAreaView,
   StyleSheet,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Pgna1() {
-  const salgados = [
-    {
-      nome: "Coxinha Vegana",
-      img: require('../assets/coxinha-vegana.jpg'),
-      desc: "Massa crocante com recheio de palmito",
-      preco: "R$ 5,00"
-    },
-    {
-      nome: "Enroladinho de Salsicha",
-      img: require('../assets/9ae5e0c4c6cc31faac49283836601c0e.jpg'),
-      desc: "Massa leve e salsicha",
-      preco: "R$ 5,00"
-    },
-    {
-      nome: "Assado de Frango",
-      img: require('../assets/calzone-de-frango.jpg'),
-      desc: "Frango desfiado caseiro",
-      preco: "R$ 8,00"
-    },
-    {
-      nome: "Assado de Carne",
-      img: require('../assets/images.jpg'),
-      desc: "Carne moída com palmito",
-      preco: "R$ 8,00"
-    },
-    {
-      nome: "Pastel de Queijo",
-      img: require('../assets/images1.jpg'),
-      desc: "Fritura crocante",
-      preco: "R$ 8,00"
-    },
-    {
-      nome: "Pão de Queijo",
-      img: require('../assets/622052-pao-de-queijo-assado-forno_1.webp'),
-      desc: "Tradicional mineiro",
-      preco: "R$ 4,00"
+
+  const [cart, setCart] = useState<any[]>([]);
+
+  const addToCart = (item: any) => {
+    setCart([...cart, item]);
+    Alert.alert('Adicionado!', `${item.name} foi adicionado ao carrinho.`);
+  };
+
+  const buySingleItem = (item: any) => {
+    Alert.alert('Compra realizada!', `Você comprou 1 ${item.name}`);
+  };
+
+  const buyCart = () => {
+    if (cart.length === 0) {
+      Alert.alert('Carrinho vazio', 'Adicione itens antes de comprar.');
+      return;
     }
+
+    Alert.alert(
+      'Compra realizada!',
+      `Você comprou ${cart.length} itens.`
+    );
+
+    setCart([]);
+  };
+
+  const menu = [
+    { name: 'Coxinha Vegana', desc: 'Massa crocante com palmito', price: 'R$ 5,00', img: require('../assets/coxinha-vegana.jpg') },
+    { name: 'Enroladinho', desc: 'Massa leve e salsicha', price: 'R$ 5,00', img: require('../assets/9ae5e0c4c6cc31faac49283836601c0e.jpg') },
+    { name: 'Assado de Frango', desc: 'Frango desfiado caseiro', price: 'R$ 8,00', img: require('../assets/calzone-de-frango.jpg') },
+    { name: 'Assado de Carne', desc: 'Carne moída com palmito', price: 'R$ 8,00', img: require('../assets/images.jpg') },
+    { name: 'Pastel de Queijo', desc: 'Fritura crocante', price: 'R$ 8,00', img: require('../assets/images1.jpg') },
+    { name: 'Pão de Queijo', desc: 'Tradicional mineiro', price: 'R$ 4,00', img: require('../assets/622052-pao-de-queijo-assado-forno_1.webp') },
+    { name: 'Refrigerante', desc: 'Coca, Guaraná, Fanta', price: 'R$ 7,50', img: require('../assets/refrigerante-lata.jpg') },
+    { name: 'Suco Natural', desc: 'Laranja, Uva, Limão', price: 'R$ 7,00', img: require('../assets/suco.jpg') },
+    { name: 'Água Mineral', desc: 'Com ou sem gás', price: 'R$ 3,50', img: require('../assets/agua-mineral.webp') },
+    { name: 'Café', desc: 'Expresso ou Pingado', price: 'R$ 4,00', img: require('../assets/cafe.jpg') },
   ];
-
-  const bebidas = [
-    {
-      nome: "Refrigerante Lata",
-      img: require('../assets/refrigerante-lata.jpg'),
-      desc: "Coca, Guaraná, Fanta",
-      preco: "R$ 7,50"
-    },
-    {
-      nome: "Suco Natural",
-      img: require('../assets/suco.jpg'),
-      desc: "Laranja, Uva, Limão",
-      preco: "R$ 7,00"
-    },
-    {
-      nome: "Água Mineral",
-      img: require('../assets/agua-mineral.webp'),
-      desc: "Com ou sem gás",
-      preco: "R$ 3,50"
-    },
-    {
-      nome: "Café",
-      img: require('../assets/cafe.jpg'),
-      desc: "Expresso ou Pingado",
-      preco: "R$ 4,00"
-    }
-  ];
-
-  const renderItem = (item: any, index: number) => (
-    <View key={index} style={styles.item}>
-      <View style={styles.itemLeft}>
-        <Text style={styles.itemName}>{item.nome}</Text>
-
-        <Image
-          source={item.img}
-          style={styles.image}
-        />
-
-        <Text style={styles.itemDesc}>{item.desc}</Text>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.cartButton}>
-            <Text style={styles.buttonText}>🛒 Carrinho</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.buyButton}>
-            <Text style={styles.buttonText}>💳 Comprar</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <Text style={styles.price}>{item.preco}</Text>
-    </View>
-  );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      
       <ScrollView style={styles.scrollView}>
 
         <View style={styles.header}>
           <Text style={styles.title}>Cantina App</Text>
-          <Text style={styles.subtitle}>
-            Sabores caseiros e lanches
-          </Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Salgados e Assados</Text>
-          {salgados.map(renderItem)}
-        </View>
+          {menu.map((item, index) => (
+            <View key={index} style={styles.card}>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Bebidas</Text>
-          {bebidas.map(renderItem)}
-        </View>
+              <Image source={item.img} style={styles.image} />
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Aceitamos cartões de crédito e débito
-          </Text>
-          <Text style={styles.footerText}>
-            Bom apetite!
-          </Text>
+              <Text style={styles.itemName}>{item.name}</Text>
+              <Text style={styles.itemDesc}>{item.desc}</Text>
+              <Text style={styles.price}>{item.price}</Text>
+
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => addToCart(item)}
+              >
+                <Text style={styles.buttonText}>
+                  Adicionar ao Carrinho
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.buySingleButton}
+                onPress={() => buySingleItem(item)}
+              >
+                <Text style={styles.buttonText}>
+                  Comprar
+                </Text>
+              </TouchableOpacity>
+
+            </View>
+          ))}
         </View>
 
       </ScrollView>
 
-      <TouchableOpacity style={styles.floatingButton}>
-        <Text style={styles.floatingButtonText}>🛒</Text>
+      {/* BOTÃO DO CARRINHO FIXO */}
+      <TouchableOpacity
+        style={styles.cartButton}
+        onPress={buyCart}
+      >
+        <Ionicons name="cart" size={28} color="#fff" />
+        {cart.length > 0 && (
+          <View style={styles.cartBadge}>
+            <Text style={styles.cartBadgeText}>
+              {cart.length}
+            </Text>
+          </View>
+        )}
       </TouchableOpacity>
 
     </SafeAreaView>
@@ -145,7 +115,6 @@ export default function Pgna1() {
 
 const styles = StyleSheet.create({
   scrollView: {
-    flex: 1,
     backgroundColor: '#fff',
   },
   header: {
@@ -157,86 +126,74 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
   },
-  subtitle: {
-    color: '#fff',
-    marginTop: 5,
-  },
   section: {
     padding: 15,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  item: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginBottom: 20,
   },
-  itemLeft: {
-    flex: 1,
+  card: {
+    width: '48%',
+    backgroundColor: '#f5f5f5',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 15,
+  },
+  image: {
+    width: '100%',
+    height: 120,
+    borderRadius: 8,
   },
   itemName: {
     fontWeight: 'bold',
+    marginTop: 5,
   },
   itemDesc: {
-    color: '#666',
     fontSize: 12,
-    marginTop: 5,
+    color: '#666',
   },
   price: {
     fontWeight: 'bold',
-    marginLeft: 10,
+    marginVertical: 5,
   },
-  image: {
-    width: 120,
-    height: 120,
-    marginTop: 8,
-    borderRadius: 8,
+  addButton: {
+    backgroundColor: '#8B0000',
+    padding: 8,
+    borderRadius: 6,
+    marginTop: 5,
   },
-  buttonContainer: {
-    marginTop: 8,
-    flexDirection: 'row',
-    gap: 8,
-  },
-  cartButton: {
-    backgroundColor: '#FFA500',
-    padding: 6,
-    borderRadius: 5,
-  },
-  buyButton: {
-    backgroundColor: '#008000',
-    padding: 6,
-    borderRadius: 5,
+  buySingleButton: {
+    backgroundColor: 'green',
+    padding: 8,
+    borderRadius: 6,
+    marginTop: 5,
   },
   buttonText: {
     color: '#fff',
+    textAlign: 'center',
     fontSize: 12,
-    fontWeight: 'bold',
   },
-  footer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  footerText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  floatingButton: {
+
+  /* CARRINHO FIXO */
+  cartButton: {
     position: 'absolute',
     bottom: 20,
     right: 20,
     backgroundColor: '#8B0000',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 15,
+    borderRadius: 50,
     elevation: 5,
   },
-  floatingButtonText: {
+  cartBadge: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: 'green',
+    borderRadius: 10,
+    paddingHorizontal: 6,
+  },
+  cartBadgeText: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 12,
   },
 });
