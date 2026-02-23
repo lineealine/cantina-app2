@@ -56,9 +56,19 @@ export default function Pgna1() {
       
       <ScrollView style={styles.scrollView}>
 
-        <View style={styles.header}>
-          <Text style={styles.title}>Cantina App</Text>
-        </View>
+      <View style={styles.topBar}>
+
+      <Image
+    source={require('../assets/cantinaLogo.png')}
+    style={styles.logo}
+    resizeMode="contain"
+  />
+
+  <TouchableOpacity style={styles.profileButton}>
+    <Ionicons name="person-outline" size={24} color="#fff" />
+  </TouchableOpacity>
+
+</View>
 
         <View style={styles.section}>
           {menu.map((item, index) => (
@@ -196,4 +206,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
   },
+  topBar: {
+    height: 140,
+    backgroundColor: '#9d1c23', 
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  
+  logo: {
+    width: 220,
+    height: 110,
+  },
+
+profileButton: {
+  position: 'absolute',
+  right: 20,
+  bottom: 25,
+  backgroundColor: '#ffffff15',
+  width: 45,
+  height: 45,
+  borderRadius: 25,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
 });
