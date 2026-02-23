@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from './screens/LoginScreen';
 import Pgna1 from './screens/Pgna1';
+// 1. ADICIONE O IMPORT DA NOVA TELA AQUI:
+import SignupScreen from './screens/SignupScreen'; 
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +19,14 @@ export default function App() {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
+        
+        {/* 2. REGISTRE A TELA DE CADASTRO AQUI: */}
+        <Stack.Screen 
+          name="SignupScreen" 
+          component={SignupScreen}
+          options={{ headerShown: false }}
+        />
+
         <Stack.Screen 
           name="Pgna1" 
           component={Pgna1}

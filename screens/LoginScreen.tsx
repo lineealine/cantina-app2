@@ -16,15 +16,24 @@ import {
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+// Tipagem para o TypeScript não reclamar das rotas
+type RootStackParamList = {
+  Login: undefined;
+  SignupScreen: undefined;
+  Pgna1: undefined;
+};
+
+type NavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
-  const [campoFocado, setCampoFocado] = useState(null); 
+  const [campoFocado, setCampoFocado] = useState<'email' | 'senha' | null>(null); 
 
- 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
@@ -45,20 +54,16 @@ export default function LoginScreen() {
     
     setTimeout(() => {
       setLoading(false);
-      
-     
       navigation.navigate('Pgna1');
-      
     }, 2000);
   };
 
   return (
-    
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} bounces={false}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} bounces={false} keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
           <Animated.View 
             style={{
@@ -100,6 +105,7 @@ export default function LoginScreen() {
                   onBlur={() => setCampoFocado(null)}
                   style={[styles.input, campoFocado === 'senha' && styles.inputFocado]}
                 />
+                
                 <TouchableOpacity 
                   style={styles.botao} 
                   onPress={handleLogin}
@@ -111,6 +117,16 @@ export default function LoginScreen() {
                   ) : (
                     <Text style={styles.textoBotao}>Entrar</Text>
                   )}
+                </TouchableOpacity>
+
+                {/* NOVO BOTÃO PARA CRIAR CONTA */}
+                <TouchableOpacity 
+                  onPress={() => navigation.navigate('SignupScreen')} 
+                  style={{ marginTop: 20 }}
+                >
+                  <Text style={{ color: '#fff', fontWeight: 'bold' }}>
+                    Não tem conta? Cadastre-se agora
+                  </Text>
                 </TouchableOpacity>
             </View>
           </Animated.View>
@@ -133,7 +149,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
     marginBottom: 10,
-    resizeMode: 'contain',
+    resizeMode: 'contain' as const, // Ajuste para TypeScript
   },
   titulo: {
     color: '#fff',
