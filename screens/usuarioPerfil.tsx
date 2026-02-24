@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function UsuarioPerfil() {
+export default function UsuarioPerfil({ navigation }: any) {
 
   const [name, setName] = useState('Usuário');
   const [editing, setEditing] = useState(false);
@@ -43,11 +43,30 @@ export default function UsuarioPerfil() {
     }
   };
 
+  const logout = () => {
+    Alert.alert(
+      'Sair da conta',
+      'Tem certeza que deseja sair?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Sair',
+          style: 'destructive',
+          onPress: () => {
+            navigation.navigate('Login'); // volta para tela de login
+          }
+        }
+      ]
+    );
+  };
+
   return (
     <ScrollView style={styles.container}>
 
-      {/* FOTO + NOME */}
+      {/* HEADER */}
       <View style={styles.header}>
+        <Text style={styles.headerTitle}>Seu Perfil</Text>
+
         <TouchableOpacity onPress={pickImage}>
           {image ? (
             <Image source={{ uri: image }} style={styles.profileImage} />
@@ -78,6 +97,14 @@ export default function UsuarioPerfil() {
           onPress={() => setShowPasswordEditor(!showPasswordEditor)}
         >
           <Text style={styles.buttonText}>Privacidade</Text>
+        </TouchableOpacity>
+
+        {/* BOTÃO SAIR */}
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={logout}
+        >
+          <Text style={styles.buttonText}>Sair da Conta</Text>
         </TouchableOpacity>
 
       </View>
@@ -134,6 +161,12 @@ const styles = StyleSheet.create({
     padding: 30,
     backgroundColor: '#8B0000',
   },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 15,
+  },
   profileImage: {
     width: 120,
     height: 120,
@@ -164,6 +197,12 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#8B0000',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  logoutButton: {
+    backgroundColor: '#B22222',
     padding: 12,
     borderRadius: 8,
     marginBottom: 10,
