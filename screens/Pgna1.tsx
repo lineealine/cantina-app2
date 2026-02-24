@@ -33,26 +33,37 @@ const menu = [
 { name:'Café',price:4,img:require('../assets/cafe.jpg')},
 ];
 
+
+// ADICIONAR
 const addToCart=(item:any)=>{
 
 const exist=cart.find(i=>i.name===item.name);
 
 if(exist){
-
 setCart(cart.map(i=>
 i.name===item.name
 ? {...i,qty:i.qty+1}
 : i
 ));
-
 }else{
-
 setCart([...cart,{...item,qty:1}]);
-
 }
 
 };
 
+
+// COMPRAR DIRETO
+const buySingleItem=(item:any)=>{
+
+Alert.alert(
+"Compra realizada",
+`Você comprou 1 ${item.name}`
+);
+
+};
+
+
+// CONTROLES
 
 const increaseQty=(name:string)=>{
 setCart(cart.map(i=>
@@ -61,7 +72,6 @@ i.name===name
 : i
 ));
 };
-
 
 const decreaseQty=(name:string)=>{
 
@@ -74,7 +84,6 @@ i.name===name
 );
 
 };
-
 
 const removeItem=(name:string)=>{
 setCart(cart.filter(i=>i.name!==name));
@@ -105,6 +114,7 @@ setCartOpen(false);
 };
 
 
+
 return(
 
 <SafeAreaView style={{flex:1}}>
@@ -122,12 +132,11 @@ style={styles.logo}
 style={styles.profileButton}
 onPress={()=>navigation.navigate("usuarioPerfil")}
 >
-
 <Ionicons name="person-outline" size={26} color="#fff"/>
-
 </TouchableOpacity>
 
 </View>
+
 
 
 <View style={styles.section}>
@@ -146,15 +155,24 @@ onPress={()=>navigation.navigate("usuarioPerfil")}
 R$ {item.price.toFixed(2)}
 </Text>
 
+
 <TouchableOpacity
 style={styles.addButton}
 onPress={()=>addToCart(item)}
 >
+<Text style={styles.buttonText}>
+Adicionar ao Carrinho
+</Text>
+</TouchableOpacity>
 
+
+<TouchableOpacity
+style={styles.buySingleButton}
+onPress={()=>buySingleItem(item)}
+>
 <Text style={styles.buttonText}>
 Comprar
 </Text>
-
 </TouchableOpacity>
 
 </View>
@@ -215,7 +233,6 @@ source={item.img}
 style={styles.cartImage}
 />
 
-
 <View style={{flex:1}}>
 
 <Text style={styles.cartName}>
@@ -254,7 +271,7 @@ onPress={()=>increaseQty(item.name)}
 onPress={()=>removeItem(item.name)}
 style={styles.trashButton}
 >
-<Ionicons name="trash" size={28} color="#fff"/>
+<Ionicons name="trash" size={26} color="#fff"/>
 </TouchableOpacity>
 
 </View>
@@ -325,6 +342,7 @@ justifyContent:"center",
 alignItems:"center"
 },
 
+
 section:{
 padding:15,
 flexDirection:"row",
@@ -358,10 +376,19 @@ marginVertical:5,
 fontSize:14
 },
 
+
 addButton:{
 backgroundColor:"#9d1c23",
 padding:8,
-borderRadius:8
+borderRadius:8,
+marginTop:5
+},
+
+buySingleButton:{
+backgroundColor:"green",
+padding:8,
+borderRadius:8,
+marginTop:5
 },
 
 buttonText:{
