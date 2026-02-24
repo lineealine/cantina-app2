@@ -6,7 +6,8 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  Alert
+  Alert,
+  ScrollView
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -15,6 +16,14 @@ export default function UsuarioPerfil() {
   const [name, setName] = useState('Usuário');
   const [editing, setEditing] = useState(false);
   const [image, setImage] = useState<string | null>(null);
+  const [password, setPassword] = useState('123456');
+  const [showPasswordEditor, setShowPasswordEditor] = useState(false);
+
+  const purchaseHistory = [
+    { id: 1, item: 'Coxinha Vegana', price: 'R$ 5,00' },
+    { id: 2, item: 'Refrigerante', price: 'R$ 7,50' },
+    { id: 3, item: 'Pastel de Queijo', price: 'R$ 8,00' },
+  ];
 
   const pickImage = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -35,105 +44,159 @@ export default function UsuarioPerfil() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
 
-      {/* FOTO */}
-      <TouchableOpacity onPress={pickImage}>
-        {image ? (
-          <Image
-            source={{ uri: image }}
-            style={styles.profileImage}
-          />
-        ) : (
-          <View style={styles.placeholder}>
-            <Text style={styles.placeholderText}>
-              {name.charAt(0).toUpperCase()}
-            </Text>
-          </View>
-        )}
-        <Text style={styles.changePhotoText}>
-          {image ? 'Trocar foto' : 'Adicionar foto'}
-        </Text>
-      </TouchableOpacity>
+      {/* FOTO + NOME */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={pickImage}>
+          {image ? (
+            <Image source={{ uri: image }} style={styles.profileImage} />
+          ) : (
+            <View style={styles.placeholder}>
+              <Text style={styles.placeholderText}>
+                {name.charAt(0).toUpperCase()}
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
 
-      {/* NOME */}
-      {editing ? (
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-        />
-      ) : (
         <Text style={styles.name}>{name}</Text>
+      </View>
+
+      {/* BOTÕES */}
+      <View style={styles.buttonsContainer}>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setEditing(!editing)}
+        >
+          <Text style={styles.buttonText}>Editar Perfil</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setShowPasswordEditor(!showPasswordEditor)}
+        >
+          <Text style={styles.buttonText}>Privacidade</Text>
+        </TouchableOpacity>
+
+      </View>
+
+      {/* EDITAR NOME */}
+      {editing && (
+        <View style={styles.editSection}>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+            placeholder="Digite seu nome"
+          />
+        </View>
       )}
 
-      {/* BOTÃO EDITAR */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => setEditing(!editing)}
-      >
-        <Text style={styles.buttonText}>
-          {editing ? 'Salvar Nome' : 'Editar Nome'}
-        </Text>
-      </TouchableOpacity>
+      {/* PRIVACIDADE / SENHA */}
+      {showPasswordEditor && (
+        <View style={styles.editSection}>
+          <Text style={styles.sectionTitle}>Alterar Senha</Text>
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+        </View>
+      )}
 
-    </View>
+      {/* HISTÓRICO */}
+      <View style={styles.historyContainer}>
+        <Text style={styles.sectionTitle}>Histórico de Compras</Text>
+
+        {purchaseHistory.map((purchase) => (
+          <View key={purchase.id} style={styles.historyItem}>
+            <Text>{purchase.item}</Text>
+            <Text>{purchase.price}</Text>
+          </View>
+        ))}
+
+      </View>
+
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#fff',
   },
+  header: {
+    alignItems: 'center',
+    padding: 30,
+    backgroundColor: '#8B0000',
+  },
   profileImage: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     marginBottom: 10,
   },
   placeholder: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    backgroundColor: '#8B0000',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
   },
   placeholderText: {
-    fontSize: 50,
-    color: '#fff',
+    fontSize: 40,
     fontWeight: 'bold',
-  },
-  changePhotoText: {
     color: '#8B0000',
-    marginBottom: 20,
-    textAlign: 'center',
   },
   name: {
     fontSize: 22,
     fontWeight: 'bold',
+    color: '#fff',
+  },
+  buttonsContainer: {
+    padding: 20,
+  },
+  button: {
+    backgroundColor: '#8B0000',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  editSection: {
+    paddingHorizontal: 20,
     marginBottom: 20,
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    width: 200,
-    padding: 8,
-    borderRadius: 8,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  button: {
-    backgroundColor: '#8B0000',
     padding: 10,
     borderRadius: 8,
+    marginTop: 10,
   },
-  buttonText: {
-    color: '#fff',
+  historyContainer: {
+    padding: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  historyItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderColor: '#eee',
   },
 });
