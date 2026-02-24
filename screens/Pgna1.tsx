@@ -9,9 +9,13 @@ import {
   TouchableOpacity,
   Alert
 } from 'react-native';
+
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Pgna1() {
+
+  const navigation = useNavigation();
 
   const [cart, setCart] = useState<any[]>([]);
 
@@ -56,19 +60,23 @@ export default function Pgna1() {
       
       <ScrollView style={styles.scrollView}>
 
-      <View style={styles.topBar}>
+        <View style={styles.topBar}>
 
-      <Image
-    source={require('../assets/cantinaLogo.png')}
-    style={styles.logo}
-    resizeMode="contain"
-  />
+          <Image
+            source={require('../assets/cantinaLogo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
 
-  <TouchableOpacity style={styles.profileButton}>
-    <Ionicons name="person-outline" size={24} color="#fff" />
-  </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.profileButton}
+            onPress={() => navigation.navigate('usuarioPerfil')}
+          >
+            <Ionicons name="person-outline" size={26} color="#fff" />
+          </TouchableOpacity>
 
-</View>
+        </View>
+
 
         <View style={styles.section}>
           {menu.map((item, index) => (
@@ -104,12 +112,12 @@ export default function Pgna1() {
 
       </ScrollView>
 
-      {/* BOTÃO DO CARRINHO FIXO */}
       <TouchableOpacity
         style={styles.cartButton}
         onPress={buyCart}
       >
         <Ionicons name="cart" size={28} color="#fff" />
+
         {cart.length > 0 && (
           <View style={styles.cartBadge}>
             <Text style={styles.cartBadgeText}>
@@ -117,31 +125,27 @@ export default function Pgna1() {
             </Text>
           </View>
         )}
+
       </TouchableOpacity>
 
     </SafeAreaView>
   );
 }
 
+
 const styles = StyleSheet.create({
+
   scrollView: {
     backgroundColor: '#fff',
   },
-  header: {
-    padding: 20,
-    backgroundColor: '#8B0000',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
+
   section: {
     padding: 15,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
+
   card: {
     width: '48%',
     backgroundColor: '#f5f5f5',
@@ -149,51 +153,84 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
   },
+
   image: {
     width: '100%',
     height: 120,
     borderRadius: 8,
   },
+
   itemName: {
     fontWeight: 'bold',
     marginTop: 5,
   },
+
   itemDesc: {
     fontSize: 12,
     color: '#666',
   },
+
   price: {
     fontWeight: 'bold',
     marginVertical: 5,
   },
+
   addButton: {
-    backgroundColor: '#8B0000',
+    backgroundColor: '#9d1c23',
     padding: 8,
     borderRadius: 6,
     marginTop: 5,
   },
+
   buySingleButton: {
     backgroundColor: 'green',
     padding: 8,
     borderRadius: 6,
     marginTop: 5,
   },
+
   buttonText: {
     color: '#fff',
     textAlign: 'center',
     fontSize: 12,
   },
 
-  /* CARRINHO FIXO */
+
+  topBar: {
+    height: 140,
+    backgroundColor: '#9d1c23',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  logo: {
+    width: 220,
+    height: 110,
+  },
+
+  profileButton: {
+    position: 'absolute',
+    right: 20,
+    bottom: 25,
+    backgroundColor: '#ffffff15',
+    width: 45,
+    height: 45,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+
   cartButton: {
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: '#8B0000',
+    backgroundColor: '#9d1c23',
     padding: 15,
     borderRadius: 50,
     elevation: 5,
   },
+
   cartBadge: {
     position: 'absolute',
     top: -5,
@@ -202,31 +239,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 6,
   },
+
   cartBadgeText: {
     color: '#fff',
     fontSize: 12,
   },
-  topBar: {
-    height: 140,
-    backgroundColor: '#9d1c23', 
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  
-  logo: {
-    width: 220,
-    height: 110,
-  },
 
-profileButton: {
-  position: 'absolute',
-  right: 20,
-  bottom: 25,
-  backgroundColor: '#ffffff15',
-  width: 45,
-  height: 45,
-  borderRadius: 25,
-  justifyContent: 'center',
-  alignItems: 'center',
-},
 });
