@@ -34,7 +34,7 @@ const menu = [
 ];
 
 
-// ADICIONAR
+
 const addToCart=(item:any)=>{
 
 const exist=cart.find(i=>i.name===item.name);
@@ -52,7 +52,7 @@ setCart([...cart,{...item,qty:1}]);
 };
 
 
-// COMPRAR DIRETO
+
 const buySingleItem=(item:any)=>{
 
 Alert.alert(
@@ -63,7 +63,6 @@ Alert.alert(
 };
 
 
-// CONTROLES
 
 const increaseQty=(name:string)=>{
 setCart(cart.map(i=>
