@@ -19,12 +19,6 @@ export default function UsuarioPerfil({ navigation }: any) {
   const [password, setPassword] = useState('123456');
   const [showPasswordEditor, setShowPasswordEditor] = useState(false);
 
-  const purchaseHistory = [
-    { id: 1, item: 'Coxinha Vegana', price: 'R$ 5,00' },
-    { id: 2, item: 'Refrigerante', price: 'R$ 7,50' },
-    { id: 3, item: 'Pastel de Queijo', price: 'R$ 8,00' },
-  ];
-
   const pickImage = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -53,7 +47,7 @@ export default function UsuarioPerfil({ navigation }: any) {
           text: 'Sair',
           style: 'destructive',
           onPress: () => {
-            navigation.navigate('Login'); // volta para tela de login
+            navigation.navigate('Login');
           }
         }
       ]
@@ -99,7 +93,6 @@ export default function UsuarioPerfil({ navigation }: any) {
           <Text style={styles.buttonText}>Privacidade</Text>
         </TouchableOpacity>
 
-        {/* BOTÃO SAIR */}
         <TouchableOpacity
           style={styles.logoutButton}
           onPress={logout}
@@ -133,19 +126,6 @@ export default function UsuarioPerfil({ navigation }: any) {
           />
         </View>
       )}
-
-      {/* HISTÓRICO */}
-      <View style={styles.historyContainer}>
-        <Text style={styles.sectionTitle}>Histórico de Compras</Text>
-
-        {purchaseHistory.map((purchase) => (
-          <View key={purchase.id} style={styles.historyItem}>
-            <Text>{purchase.item}</Text>
-            <Text>{purchase.price}</Text>
-          </View>
-        ))}
-
-      </View>
 
     </ScrollView>
   );
@@ -223,19 +203,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 10,
   },
-  historyContainer: {
-    padding: 20,
-  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-  },
-  historyItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderColor: '#eee',
   },
 });
