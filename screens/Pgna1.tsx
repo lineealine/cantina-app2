@@ -24,7 +24,9 @@ const [cart,setCart] = useState<any[]>([]);
 const [cartOpen,setCartOpen] = useState(false);
 const [saldo, setSaldo] = useState(0);
 const [modalRecarga, setModalRecarga] = useState(false);
+const [modalConfig, setModalConfig] = useState(false);
 const [valorRecarga, setValorRecarga] = useState('');
+const [isDarkMode, setIsDarkMode] = useState(false);
 
 const menu = [
 { name:'Coxinha Vegana',price:5,img:require('../assets/coxinha-vegana.jpg')},
@@ -40,15 +42,27 @@ const menu = [
 ];
 
 useEffect(() => {
-carregarSaldo();
+carregarDados();
 }, []);
 
-const carregarSaldo = async () => {
+const carregarDados = async () => {
 const usuarioSalvo = await AsyncStorage.getItem("usuarioLogado");
 if (usuarioSalvo) {
 const usuario = JSON.parse(usuarioSalvo);
 setSaldo(usuario.saldo || 0);
+setIsDarkMode(usuario.temaEscuro || false);
 }
+};
+
+const alterarTema = async (escuro: boolean) => {
+setIsDarkMode(escuro);
+const usuarioSalvo = await AsyncStorage.getItem("usuarioLogado");
+if (usuarioSalvo) {
+const usuario = JSON.parse(usuarioSalvo);
+usuario.temaEscuro = escuro;
+await AsyncStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+}
+setModalConfig(false);
 };
 
 const salvarSaldo = async (novoSaldo: number) => {
@@ -85,14 +99,7 @@ setCart([...cart,{...item,qty:1}]);
 
 const buySingleItem=(item:any)=>{
 if (saldo < item.price) {
-Alert.alert(
-"Saldo Insuficiente",
-"Deseja recarregar?",
-[
-{ text: "Não", style: "cancel" },
-{ text: "Recarregar", onPress: () => setModalRecarga(true) }
-]
-);
+Alert.alert("Saldo Insuficiente", "Deseja recarregar?",);
 return;
 }
 const novoSaldo = saldo - item.price;
@@ -120,14 +127,7 @@ Alert.alert("Carrinho vazio");
 return;
 }
 if (saldo < totalPrice) {
-Alert.alert(
-"Saldo Insuficiente",
-"Recarregue para finalizar.",
-[
-{ text: "Voltar", style: "cancel" },
-{ text: "Recarregar", onPress: () => {setCartOpen(false); setModalRecarga(true);}}
-]
-);
+Alert.alert("Saldo Insuficiente", "Recarregue para finalizar.",);
 return;
 }
 const novoSaldo = saldo - totalPrice;
@@ -137,15 +137,27 @@ setCart([]);
 setCartOpen(false);
 };
 
+const themeStyles = {
+backgroundColor: isDarkMode ? '#121212' : '#fff',
+textColor: isDarkMode ? '#fff' : '#000',
+cardColor: isDarkMode ? '#1e1e1e' : '#f5f5f5'
+};
+
 return(
-<SafeAreaView style={{flex:1}}>
+<SafeAreaView style={{flex:1, backgroundColor: themeStyles.backgroundColor}}>
 <ScrollView>
 <View style={styles.topBar}>
 <Image source={require('../assets/cantinaLogo.png')} style={styles.logo}/>
+
 <TouchableOpacity style={styles.saldoContainer} onPress={() => setModalRecarga(true)}>
 <Text style={styles.saldoTexto}>Saldo: R$ {saldo.toFixed(2)}</Text>
-<Ionicons name="add-circle" size={20} color="#fff" style={{marginLeft: 5}} />
+<Ionicons name="add-circle" size={18} color="#fff" style={{marginLeft: 5}} />
 </TouchableOpacity>
+
+<TouchableOpacity style={styles.settingsButton} onPress={() => setModalConfig(true)}>
+<Ionicons name="settings-outline" size={26} color="#fff" />
+</TouchableOpacity>
+
 <TouchableOpacity style={styles.profileButton} onPress={()=>navigation.navigate("usuarioPerfil")}>
 <Ionicons name="person-outline" size={26} color="#fff" />
 </TouchableOpacity>
@@ -153,10 +165,10 @@ return(
 
 <View style={styles.section}>
 {menu.map((item,index)=>(
-<View key={index} style={styles.card}>
+<View key={index} style={[styles.card, {backgroundColor: themeStyles.cardColor}]}>
 <Image source={item.img} style={styles.image}/>
-<Text style={styles.name}>{item.name}</Text>
-<Text style={styles.price}>R$ {item.price.toFixed(2)}</Text>
+<Text style={[styles.name, {color: themeStyles.textColor}]}>{item.name}</Text>
+<Text style={[styles.price, {color: themeStyles.textColor}]}>R$ {item.price.toFixed(2)}</Text>
 <TouchableOpacity style={styles.addButton} onPress={()=>addToCart(item)}>
 <Text style={styles.buttonText}>Adicionar</Text>
 </TouchableOpacity>
@@ -177,11 +189,12 @@ return(
 
 <Modal visible={modalRecarga} transparent animationType="fade">
 <View style={styles.modalOverlay}>
-<View style={styles.modalContent}>
-<Text style={styles.modalTitle}>Adicionar Saldo</Text>
+<View style={[styles.modalContent, {backgroundColor: themeStyles.backgroundColor}]}>
+<Text style={[styles.modalTitle, {color: themeStyles.textColor}]}>Adicionar Saldo</Text>
 <TextInput 
-style={styles.inputRecarga}
+style={[styles.inputRecarga, {color: themeStyles.textColor, borderColor: themeStyles.textColor}]}
 placeholder="R$ 0,00"
+placeholderTextColor="#999"
 keyboardType="numeric"
 value={valorRecarga}
 onChangeText={setValorRecarga}
@@ -198,22 +211,51 @@ onChangeText={setValorRecarga}
 </View>
 </Modal>
 
+<Modal visible={modalConfig} transparent animationType="slide">
+<View style={styles.modalOverlay}>
+<View style={[styles.modalContent, {backgroundColor: themeStyles.backgroundColor}]}>
+<Text style={[styles.modalTitle, {color: themeStyles.textColor}]}>Configurações</Text>
+<Text style={{color: themeStyles.textColor, marginBottom: 20}}>Selecione o tema do App:</Text>
+
+<TouchableOpacity 
+style={[styles.btnTema, {backgroundColor: isDarkMode ? '#333' : '#eee'}]} 
+onPress={() => alterarTema(false)}
+>
+<Ionicons name="sunny" size={20} color={isDarkMode ? "#aaa" : "#ffcc00"} />
+<Text style={[styles.btnTemaTexto, {color: themeStyles.textColor}]}> Tema Claro</Text>
+</TouchableOpacity>
+
+<TouchableOpacity 
+style={[styles.btnTema, {backgroundColor: isDarkMode ? '#444' : '#eee', marginTop: 10}]} 
+onPress={() => alterarTema(true)}
+>
+<Ionicons name="moon" size={20} color={isDarkMode ? "#99ccff" : "#333"} />
+<Text style={[styles.btnTemaTexto, {color: themeStyles.textColor}]}> Tema Escuro</Text>
+</TouchableOpacity>
+
+<TouchableOpacity style={{marginTop: 30}} onPress={() => setModalConfig(false)}>
+<Text style={{color: 'red', fontWeight: 'bold'}}>Fechar</Text>
+</TouchableOpacity>
+</View>
+</View>
+</Modal>
+
 {cartOpen &&(
-<View style={styles.cartPanel}>
+<View style={[styles.cartPanel, {backgroundColor: themeStyles.backgroundColor}]}>
 <View style={styles.cartHeader}>
-<Text style={styles.cartTitle}>Carrinho</Text>
-<TouchableOpacity onPress={()=>setCartOpen(false)}><Ionicons name="close" size={26}/></TouchableOpacity>
+<Text style={[styles.cartTitle, {color: themeStyles.textColor}]}>Carrinho</Text>
+<TouchableOpacity onPress={()=>setCartOpen(false)}><Ionicons name="close" size={26} color={themeStyles.textColor}/></TouchableOpacity>
 </View>
 <ScrollView>
 {cart.map((item,index)=>(
 <View key={index} style={styles.cartItem}>
 <Image source={item.img} style={styles.cartImage}/>
 <View style={{flex:1}}>
-<Text style={styles.cartName}>{item.name}</Text>
-<Text style={styles.cartPrice}>R$ {item.price.toFixed(2)}</Text>
+<Text style={[styles.cartName, {color: themeStyles.textColor}]}>{item.name}</Text>
+<Text style={[styles.cartPrice, {color: themeStyles.textColor}]}>R$ {item.price.toFixed(2)}</Text>
 <View style={styles.qtyRow}>
 <TouchableOpacity style={styles.qtyButton} onPress={()=>decreaseQty(item.name)}><Text style={styles.qtyText}>-</Text></TouchableOpacity>
-<Text style={styles.qtyNumber}>{item.qty}</Text>
+<Text style={[styles.qtyNumber, {color: themeStyles.textColor}]}>{item.qty}</Text>
 <TouchableOpacity style={styles.qtyButton} onPress={()=>increaseQty(item.name)}><Text style={styles.qtyText}>+</Text></TouchableOpacity>
 <TouchableOpacity onPress={()=>removeItem(item.name)} style={styles.trashButton}><Ionicons name="trash" size={26} color="#fff" /></TouchableOpacity>
 </View>
@@ -222,7 +264,7 @@ onChangeText={setValorRecarga}
 ))}
 </ScrollView>
 <View style={styles.totalBox}>
-<Text style={styles.total}>Total: R$ {totalPrice.toFixed(2)}</Text>
+<Text style={[styles.total, {color: themeStyles.textColor}]}>Total: R$ {totalPrice.toFixed(2)}</Text>
 <TouchableOpacity style={styles.buyButton} onPress={buyCart}><Text style={styles.buyText}>Finalizar</Text></TouchableOpacity>
 </View>
 </View>
@@ -233,34 +275,36 @@ onChangeText={setValorRecarga}
 
 const styles=StyleSheet.create({
 topBar:{ 
-height: 180, 
+height: 185, 
 backgroundColor: "#9d1c23", 
 justifyContent: "center", 
 alignItems: "center",
-paddingTop: 20
+paddingTop: 10
 },
 logo:{ 
-width: 180, 
-height: 120,
-resizeMode: 'contain'
+width: 160, 
+height: 100,
+resizeMode: 'contain',
+marginBottom: 10
 },
 saldoContainer: { 
 position: 'absolute', 
-left: 7, 
-bottom: 10, 
+left: 20, 
+bottom: 12, 
 backgroundColor: 'rgba(0,0,0,0.4)', 
-paddingHorizontal: 5, 
-paddingVertical: 6, 
-borderRadius: 15, 
+paddingHorizontal: 12, 
+paddingVertical: 5, 
+borderRadius: 12, 
 flexDirection: 'row', 
 alignItems: 'center',
 borderWidth: 1,
-borderColor: 'rgba(255,255,255,0.3)'
+borderColor: 'rgba(255,255,255,0.2)'
 },
-saldoTexto: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
+saldoTexto: { color: '#fff', fontWeight: 'bold', fontSize: 13 },
+settingsButton: { position: "absolute", right: 20, bottom: 65, backgroundColor: "#ffffff20", width: 45, height: 45, borderRadius: 25, justifyContent: "center", alignItems: "center" },
 profileButton:{ position:"absolute", right:20, bottom:10, backgroundColor:"#ffffff20", width:45, height:45, borderRadius:25, justifyContent:"center", alignItems:"center" },
 section:{ padding:15, flexDirection:"row", flexWrap:"wrap", justifyContent:"space-between" },
-card:{ width:"48%", backgroundColor:"#f5f5f5", borderRadius:12, padding:10, marginBottom:15, elevation:3 },
+card:{ width:"48%", borderRadius:12, padding:10, marginBottom:15, elevation:3 },
 image:{ width:"100%", height:130, borderRadius:10 },
 name:{ fontWeight:"bold", marginTop:6, fontSize:14 },
 price:{ marginVertical:5, fontSize:14 },
@@ -269,7 +313,7 @@ buySingleButton:{ backgroundColor:"green", padding:8, borderRadius:8, marginTop:
 buttonText:{ color:"#fff", textAlign:"center", fontWeight:"bold" },
 cartButton:{ position:"absolute", bottom:20, right:20, backgroundColor:"#9d1c23", padding:15, borderRadius:50, elevation:5 },
 badge:{ position:"absolute", top:-5, right:-5, backgroundColor:"green", borderRadius:10, paddingHorizontal:6 },
-cartPanel:{ position:"absolute", right:0, top:0, bottom:0, width:"85%", backgroundColor:"#fff", padding:15, elevation:10 },
+cartPanel:{ position:"absolute", right:0, top:0, bottom:0, width:"85%", padding:15, elevation:10 },
 cartHeader:{ flexDirection:"row", justifyContent:"space-between", marginBottom:10 },
 cartTitle:{ fontSize:22, fontWeight:"bold" },
 cartItem:{ flexDirection:"row", marginBottom:18, alignItems:"center" },
@@ -286,10 +330,12 @@ total:{ fontSize:20, fontWeight:"bold", marginBottom:10 },
 buyButton:{ backgroundColor:"#9d1c23", padding:14, borderRadius:10, alignItems:"center" },
 buyText:{ color:"#fff", fontSize:16, fontWeight:"bold" },
 modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
-modalContent: { width: '80%', backgroundColor: '#fff', borderRadius: 20, padding: 25, alignItems: 'center' },
+modalContent: { width: '80%', borderRadius: 20, padding: 25, alignItems: 'center' },
 modalTitle: { fontSize: 20, fontWeight: 'bold', marginBottom: 20 },
-inputRecarga: { width: '100%', borderWidth: 1, borderColor: '#ddd', borderRadius: 10, padding: 15, fontSize: 18, textAlign: 'center', marginBottom: 20 },
+inputRecarga: { width: '100%', borderWidth: 1, borderRadius: 10, padding: 15, fontSize: 18, textAlign: 'center', marginBottom: 20 },
 modalButtons: { flexDirection: 'row', justifyContent: 'space-between', width: '100%' },
 btnModal: { flex: 1, padding: 12, borderRadius: 10, marginHorizontal: 5 },
-btnModalText: { color: '#fff', textAlign: 'center', fontWeight: 'bold' }
+btnModalText: { color: '#fff', textAlign: 'center', fontWeight: 'bold' },
+btnTema: { flexDirection: 'row', width: '100%', padding: 15, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+btnTemaTexto: { fontWeight: 'bold', fontSize: 16 }
 });
