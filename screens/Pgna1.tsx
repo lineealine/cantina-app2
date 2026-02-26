@@ -246,10 +246,10 @@ resizeMode: 'contain'
 },
 saldoContainer: { 
 position: 'absolute', 
-left: 20, 
+left: 7, 
 bottom: 10, 
 backgroundColor: 'rgba(0,0,0,0.4)', 
-paddingHorizontal: 15, 
+paddingHorizontal: 5, 
 paddingVertical: 6, 
 borderRadius: 15, 
 flexDirection: 'row', 
